@@ -63,10 +63,6 @@ class dataCollector:
         new_listings = self.parse_listings(soup)
         print(*new_listings, sep='\n')
 
-        # Example of how to handle old listings if needed
-        # old_listings = self.parse_listings(soup, new=False)
-        # print(*old_listings, sep='\n')
-
         if new_listings:
             self.log_listings(new_listings)
         else:

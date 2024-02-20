@@ -5,12 +5,11 @@ import os
 import sys
 import configparser
 
-# Calculate the path to the root of the project ('web-app-test')
-current_dir = os.path.dirname(os.path.abspath(__file__))  # Gets the directory where the script is located
-root_dir = os.path.join(current_dir, '/home/carson/software_architecture/applications/web-app-test/')  # Adjust the path to point to 'web-app-test'
-sys.path.append(os.path.normpath(root_dir))  # Adds the project root directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.join(current_dir, '/home/carson/software_architecture/applications/web-app-test/')
+sys.path.append(os.path.normpath(root_dir))
 
-from components.dataCollector.src.main.scrapeBat import dataCollector  # Import after adding project root to sys.path
+from components.dataCollector.src.main.scrapeBat import dataCollector
 
 
 class TestDataCollector(unittest.TestCase):
@@ -27,7 +26,6 @@ class TestDataCollector(unittest.TestCase):
         with open(self.ini_file, 'w') as configfile:
             config.write(configfile)
 
-        # Ensure the log file does not exist to start fresh
         if os.path.exists(self.log_file):
             os.remove(self.log_file)
 
@@ -74,8 +72,7 @@ class TestDataCollector(unittest.TestCase):
 
         self.assertTrue(len(logs) > 0, "The log file should contain entries")
         self.assertIn('Test Listing', logs[0], "The log should contain the listing title")
-
-    # Additional methods can be added here to cover more functionalities
+        
 
 if __name__ == '__main__':
     unittest.main()
