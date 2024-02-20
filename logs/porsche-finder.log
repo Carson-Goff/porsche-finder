@@ -7,3 +7,55 @@
 2024-02-19 16:32:47: 19×8.5″ and 19×11″ Center-Lock Wheels for Porsche 997 - https://bringatrailer.com/listing/19x8-5%e2%80%b3-and-19x11%e2%80%b3-center-lock-wheels-for-porsche-997/
 2024-02-19 16:32:47: 2006 Porsche 911 Carrera Cabriolet - https://bringatrailer.com/listing/2006-porsche-911-carrera-cabriolet-38/
 2024-02-19 16:32:47: 2007 Porsche 911 Carrera S Cabriolet 6-Speed - https://bringatrailer.com/listing/2007-porsche-911-carrera-s-cabriolet-26/
+2024-02-20 09:27:11,724 - __main__ - INFO - Fetching new listings
+2024-02-20 09:27:11,835 - __main__ - INFO - Parsing listings
+2024-02-20 09:27:11,837 - __main__ - INFO - Logging listings
+2024-02-20 09:27:11: 2012 Porsche 911 Carrera GTS 6-Speed - https://bringatrailer.com/listing/2012-porsche-911-carrera-gts-38/
+2024-02-20 09:27:11: 2007 Porsche 911 Targa 4 6-Speed - https://bringatrailer.com/listing/2007-porsche-911-targa-4-6/
+2024-02-20 09:27:11: 34k-Mile 2006 Porsche 911 Carrera 4S Coupe 6-Speed - https://bringatrailer.com/listing/2006-porsche-911-carrera-4s-coupe-16/
+2024-02-20 09:27:11: 19×8.5″ and 19×11″ Center-Lock Wheels for Porsche 997 - https://bringatrailer.com/listing/19x8-5%e2%80%b3-and-19x11%e2%80%b3-center-lock-wheels-for-porsche-997/
+2024-02-20 09:27:11: 2006 Porsche 911 Carrera Cabriolet - https://bringatrailer.com/listing/2006-porsche-911-carrera-cabriolet-38/
+2024-02-20 09:27:11: 2007 Porsche 911 Carrera S Cabriolet 6-Speed - https://bringatrailer.com/listing/2007-porsche-911-carrera-s-cabriolet-26/
+2024-02-20 09:59:00,175 - __main__ - INFO - Fetching new listings
+2024-02-20 09:59:00,284 - __main__ - INFO - Parsing listings
+2024-02-20 09:59:00,286 - __main__ - INFO - Parsing listings
+2024-02-20 10:10:57,079 - __main__ - INFO - Fetching new listings
+2024-02-20 10:10:57,223 - __main__ - INFO - Parsing listings
+2024-02-20 10:10:57,225 - __main__ - INFO - Parsing listings
+2024-02-20 10:19:42,576 - __main__ - INFO - Fetching new listings
+2024-02-20 10:19:42,744 - __main__ - INFO - Parsing listings
+2024-02-20 10:19:42,746 - __main__ - INFO - Parsing listings
+2024-02-20 10:19:42,750 - __main__ - ERROR - JSON decoding error: Unterminated string starting at: line 1 column 563435 (char 563434)
+2024-02-20 10:19:42,751 - __main__ - INFO - Logging listings
+2024-02-20 10:19:42: 2012 Porsche 911 Carrera GTS 6-Speed - https://bringatrailer.com/listing/2012-porsche-911-carrera-gts-38/
+2024-02-20 10:19:42: 2007 Porsche 911 Targa 4 6-Speed - https://bringatrailer.com/listing/2007-porsche-911-targa-4-6/
+2024-02-20 10:19:42: 34k-Mile 2006 Porsche 911 Carrera 4S Coupe 6-Speed - https://bringatrailer.com/listing/2006-porsche-911-carrera-4s-coupe-16/
+2024-02-20 10:19:42: 19×8.5″ and 19×11″ Center-Lock Wheels for Porsche 997 - https://bringatrailer.com/listing/19x8-5%e2%80%b3-and-19x11%e2%80%b3-center-lock-wheels-for-porsche-997/
+2024-02-20 10:19:42: 2006 Porsche 911 Carrera Cabriolet - https://bringatrailer.com/listing/2006-porsche-911-carrera-cabriolet-38/
+2024-02-20 10:19:42: 2007 Porsche 911 Carrera S Cabriolet 6-Speed - https://bringatrailer.com/listing/2007-porsche-911-carrera-s-cabriolet-26/
+2024-02-20 10:20:18,107 - __main__ - INFO - Fetching new listings
+2024-02-20 10:20:18,206 - __main__ - INFO - Parsing listings
+2024-02-20 10:20:18,207 - __main__ - ERROR - JSON decoding error: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+2024-02-20 10:20:53,611 - __main__ - INFO - Fetching new listings
+2024-02-20 10:20:53,701 - __main__ - INFO - Parsing listings
+2024-02-20 10:20:53,702 - __main__ - ERROR - JSON decoding error: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+2024-02-20 10:21:25,937 - __main__ - INFO - Fetching new listings
+2024-02-20 10:21:26,121 - __main__ - INFO - Parsing listings
+2024-02-20 10:21:26,123 - __main__ - ERROR - JSON decoding error: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+2024-02-20 10:22:36,411 - __main__ - INFO - Fetching new listings
+2024-02-20 10:22:36,669 - __main__ - INFO - Parsing listings
+2024-02-20 10:22:36,670 - __main__ - INFO - Parsing listings
+2024-02-20 10:24:02,714 - __main__ - INFO - Fetching new listings
+2024-02-20 10:24:02,796 - __main__ - INFO - Parsing listings
+2024-02-20 10:29:42,688 - __main__ - INFO - Fetching new listings
+2024-02-20 10:29:42,793 - __main__ - INFO - Parsing listings
+2024-02-20 10:36:45,709 - __main__ - INFO - Fetching new listings
+2024-02-20 10:36:45,800 - __main__ - INFO - Parsing listings
+2024-02-20 10:37:29,324 - __main__ - INFO - Fetching new listings
+2024-02-20 10:37:29,412 - __main__ - INFO - Parsing listings
+2024-02-20 10:37:38,460 - __main__ - INFO - Fetching new listings
+2024-02-20 10:37:38,538 - __main__ - INFO - Parsing listings
+2024-02-20 10:44:55,392 - __main__ - INFO - Fetching new listings
+2024-02-20 10:44:55,491 - __main__ - INFO - Parsing listings
+2024-02-20 10:52:42,509 - __main__ - INFO - Fetching new listings
+2024-02-20 10:52:42,592 - __main__ - INFO - Parsing listings
