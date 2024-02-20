@@ -37,7 +37,7 @@ class dataCollector:
             listings = soup.find_all('div', class_='listing-card listing-card-separate')
             for listing in listings:
                 data = {
-                    'listing_id': listing.get('data-listing_id', None),
+                    '_id': listing.get('data-listing_id', None),
                     'title': listing.find('h3').get_text(strip=True),
                     'url': listing.find('h3').find('a')['href'],
                     'image_url': listing.find('img')['src'] if listing.find('img') else None,
@@ -60,7 +60,7 @@ class dataCollector:
                         if 'Sold' in listing.get('sold_text', None):
                             sold = True
                         data = {
-                            'listing_id': listing.get('id', None),
+                            '_id': listing.get('id', None),
                             'title': listing.get('title', None),
                             'url': listing.get('url', None),
                             'image_url': listing.get('thumbnail_url', None),
@@ -93,6 +93,18 @@ class dataCollector:
         #     self.log_listings(new_listings)
         # else:
         #     print("No new listings found.")
+    
+    def get_historic_listings(self):
+        soup = self.fetch_listings()
+        old_listings = self.parse_listings(soup, False)
+        
+        return old_listings
+        
+    def get_current_listings(self):
+        soup = self.fetch_listings()
+        current_listings = self.parse_listings(soup)
+        
+        return current_listings
 
 if __name__ == '__main__':
     ini_file = 'porsche-finder.ini'
