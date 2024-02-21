@@ -2,7 +2,7 @@ import pymongo
 import os
 import configparser
 import logging
-from scrapeBat import dataCollector
+from typing import List, Dict
 
 
 class dbOperation:
@@ -18,32 +18,38 @@ class dbOperation:
             self.config.read(self.ini_file)
             self.mongo_client = self.config['database']['mongo_client']
             self.db_name = self.config['database']['db_name']
+            self.myclient = pymongo.MongoClient(self.mongo_client)
+            self.mydb = self.myclient[self.db_name]
+            self.mycol = self.mydb["past_sales"]
             
     def setup_logging(self):
         logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    def setup_db(self):
+    def setup_db(self) -> None:
         myclient = pymongo.MongoClient(self.mongo_client)
         mydb = myclient[self.db_name]
         self.mycol = mydb["past_sales"]
-        print(myclient.list_database_names())
+        self.logger.info(myclient.list_database_names())
 
-    def insert_historical(self):
-        collector = dataCollector(self.ini_file, self.log_file)
-        historic_listings = collector.get_historic_listings()
-        print(historic_listings)
-
-        x = self.mycol.insert_many(historic_listings)
-        print(x.inserted_ids)
+    def insert_record_list(self, records: List) -> None:
+        x = self.mycol.insert_many(records)
+        self.logger.info(f"Record ID's inserted: {x.inserted_ids}")
 
     def retrieve_record(self):
         x = self.mycol.find_one()
-        print(x)
+        self.logger.info(f"Single record retrieved: {x}")
+        
+    def retrieve_all(self) -> List:
+        mydoc = list(self.mycol.find())
+        self.logger.info(f"Records retrieved: {mydoc}")
+            
+        return mydoc
 
-    def retrieve_query(self, query):
+    def retrieve_query(self, query: Dict):
         mydoc = self.mycol.find(query)
-        for x in mydoc:
-            print(x)
+        self.logger.info(f"Records retrieved: {mydoc}")
+            
+        return mydoc
     
 
 if __name__ == '__main__':
