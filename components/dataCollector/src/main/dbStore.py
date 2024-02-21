@@ -29,17 +29,30 @@ class dbOperation:
         self.mycol = mydb["past_sales"]
         print(myclient.list_database_names())
 
-    def refresh_historical(self):
+    def insert_historical(self):
         collector = dataCollector(self.ini_file, self.log_file)
         historic_listings = collector.get_historic_listings()
         print(historic_listings)
 
         x = self.mycol.insert_many(historic_listings)
         print(x.inserted_ids)
-        
+
+    def retrieve_record(self):
+        x = self.mycol.find_one()
+        print(x)
+
+    def retrieve_query(self):
+        myquery = { "sold": False }
+        mydoc = self.mycol.find(myquery)
+        for x in mydoc:
+            print(x)
+    
+
 if __name__ == '__main__':
     ini_file = 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
     db = dbOperation(ini_file, log_file)
     db.setup_db()
-    db.refresh_historical()
+    # db.refresh_historical()
+    # db.retrieve_record()
+    db.retrieve_query()
