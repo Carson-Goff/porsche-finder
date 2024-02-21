@@ -1,6 +1,5 @@
 import pymongo
 import os
-import sys
 import configparser
 import logging
 from scrapeBat import dataCollector
@@ -41,9 +40,8 @@ class dbOperation:
         x = self.mycol.find_one()
         print(x)
 
-    def retrieve_query(self):
-        myquery = { "sold": False }
-        mydoc = self.mycol.find(myquery)
+    def retrieve_query(self, query):
+        mydoc = self.mycol.find(query)
         for x in mydoc:
             print(x)
     
@@ -55,4 +53,4 @@ if __name__ == '__main__':
     db.setup_db()
     # db.refresh_historical()
     # db.retrieve_record()
-    db.retrieve_query()
+    db.retrieve_query({ "sold": False })
