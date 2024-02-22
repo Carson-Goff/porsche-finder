@@ -1,15 +1,11 @@
-import requests
-from bs4 import BeautifulSoup
-import datetime
 import configparser
 import os
 import logging
-import json
-import re
 import pandas as pd
-from components.dataAnalyzer.src.main.modelHistory import model
 from components.dataCollector.src.main.dbOps import dbOperation
 from components.dataCollector.src.main.scrapeBat import dataCollector
+from components.dataAnalyzer.src.main.transformData import transform
+from components.dataAnalyzer.src.main.modelHistory import model
 
 class porsche_finder:
     
@@ -24,6 +20,7 @@ class porsche_finder:
             self.config.read(self.ini_file)
             self.db = dbOperation(self.ini_file, self.log_file)
             self.collector = dataCollector(self.ini_file, self.log_file)
+            self.transform = transform(self.ini_file, self.log_file)
             self.model = model(self.ini_file, self.log_file)
             
     def setup_logging(self):
@@ -35,19 +32,23 @@ class porsche_finder:
         historic = self.collector.get_historic_listings()
         self.logger.info(historic)
         self.db.insert_record_list(historic)
+
+    
         
-    def get_data(self):
+    def prep_model(self):
         data = self.db.retrieve_all()
-        df = pd.DataFrame(data)
+        df = self.transform.extract_fields(pd.DataFrame(data))
         print(df)
-        titles = df['title'].tolist()
-        print(titles)
         
         return df
-        
-    def test(self, df):
-        df1 = self.model.extract_fields(df)
-        print(df1)
+    
+    def run_model(self, df):
+        self.model.train_model(df)
+
+    def predict_prices(self):
+        new = self.collector.get_current_listings()
+        df2 = self.transform.extract_fields(pd.DataFrame(new))
+        self.model.predict_new_listings(df2)
         
         
 
@@ -56,5 +57,6 @@ if __name__ == '__main__':
     log_file = 'logs/porsche-finder.log'
     finder = porsche_finder(ini_file, log_file)
     # finder.setup()
-    df = finder.get_data()
-    df1 = finder.test(df)
+    df = finder.prep_model()
+    finder.run_model(df)
+    finder.predict_prices()

@@ -1,83 +1,65 @@
-import pymongo
-import os
+import pandas as pd
+import numpy as np
 import configparser
 import logging
-import sys
-import pandas as pd
-import re
+import os
+from sklearn.compose import ColumnTransformer
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
 
 class model:
-    
-    def __init__(self, ini_file, log_file):
-        self.ini_file = ini_file
-        self.log_file = log_file
+
+    def __init__(self, ini_file: str, log_file: str):
         self.config = configparser.ConfigParser()
+        if os.path.exists(ini_file):
+            self.config.read(ini_file)
+        else:
+            raise FileNotFoundError(f"{ini_file} does not exist")
+        
         self.logger = logging.getLogger(__name__)
-        self.setup_logging()
+        self.setup_logging(log_file)
 
-        if os.path.exists(self.ini_file):
-            self.config.read(self.ini_file)
-            
-            
-    def setup_logging(self):
-        logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        
-    def extract_fields(self, df):
-        # Lists to hold the extracted information
-        years = []
-        trims = []
-        transmissions = []
-        bodystyles = []
+    def setup_logging(self, log_file: str):
+        logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        self.logger.info('Initialized logging.')
+    
 
-        year_regex = re.compile(r'\b(19|20)\d{2}\b')
-        trim_regex = re.compile(r'(Carrera|Targa) (S|4S|GTS|4)?')
-        transmission_regex = re.compile(r'(\d)-Speed')
-        
-        for title in df['title']:
-            year_match = year_regex.search(title)
-            years.append(year_match.group() if year_match else None)
-            trim_match = trim_regex.search(title)
-            trims.append(trim_match.group() if trim_match else 'Carrera')
-            transmissions.append('M' if transmission_regex.search(title) else 'A')
-            
-            if 'Targa' in title:
-                bodystyles.append('Targa')
-            elif 'Cabriolet' in title:
-                bodystyles.append('Cabriolet')
-            else:
-                bodystyles.append('Coupe')
-        
-        df['year'] = years
-        df['trim'] = trims
-        df['transmission'] = transmissions
-        df['bodystyle'] = bodystyles
-        
-        df = df.dropna(subset=['year'])
-        df['price'] = df['price'].replace('[\$,]', '', regex=True).astype(int)
-        
-        return df
-        
-        
-    def train_model(self, df):
-        
+    def data_preprocessor(self, df):
         df['sold'] = df['sold'].astype(int)
-        X = df[['sold', 'year', 'trim', 'transmission', 'bodystyle']]
+
+        X = df[['year', 'trim', 'transmission', 'bodystyle']]
         y = df['price']
-        
+
         categorical_features = ['trim', 'transmission', 'bodystyle']
-        numeric_features = ['sold', 'year']
-        
-        preprocessor = ColumnTransformer(
+        numeric_features = ['year']
+
+        self.preprocessor = ColumnTransformer(
             transformers=[
                 ('num', 'passthrough', numeric_features),
                 ('cat', OneHotEncoder(), categorical_features)
             ])
         
-        X_processed = preprocessor.fit_transform(X)
+        X_processed = self.preprocessor.fit_transform(X)
+        return X_processed, y
+
+    def train_model(self, df):
+        X_processed, y = self.data_preprocessor(df)
         X_train, X_test, y_train, y_test = train_test_split(X_processed, y, test_size=0.3, random_state=42)
-        
-        reg = LinearRegression()
-        reg.fit(X_train, y_train)
-        
-        score = reg.score(X_test, y_test)
+
+        self.reg = LinearRegression()
+        self.reg.fit(X_train, y_train)
+
+        score = self.reg.score(X_test, y_test)
         print(f"The score of the model is: {score}")
+        self.logger.info(f"The score of the model is: {score}")
+
+
+
+    def predict_new_listings(self, new_data):
+        X_new = self.preprocessor.transform(new_data)
+        predicted_prices = self.reg.predict(X_new)
+        (f"Predicted prices: {predicted_prices}")
+        self.logger.info(f"Predicted prices: {predicted_prices}")
+
+        return predicted_prices

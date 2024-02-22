@@ -7,29 +7,26 @@ from typing import List, Dict
 
 class dbOperation:
     
-    def __init__(self, ini_file, log_file):
-        self.ini_file = ini_file
-        self.log_file = log_file
+    def __init__(self, ini_file: str, log_file: str):
         self.config = configparser.ConfigParser()
         self.logger = logging.getLogger(__name__)
-        self.setup_logging()
+        self.setup_logging(log_file)
 
-        if os.path.exists(self.ini_file):
-            self.config.read(self.ini_file)
-            self.mongo_client = self.config['database']['mongo_client']
-            self.db_name = self.config['database']['db_name']
-            self.myclient = pymongo.MongoClient(self.mongo_client)
-            self.mydb = self.myclient[self.db_name]
-            self.mycol = self.mydb["past_sales"]
-            
-    def setup_logging(self):
-        logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        if os.path.exists(ini_file):
+            self.config.read(ini_file)
+            self.setup_db()
+
+    def setup_logging(self, log_file: str) -> None:
+        logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     def setup_db(self) -> None:
-        myclient = pymongo.MongoClient(self.mongo_client)
-        mydb = myclient[self.db_name]
-        self.mycol = mydb["past_sales"]
-        self.logger.info(myclient.list_database_names())
+        # Assuming 'database' section and keys exist in your config file
+        mongo_client = self.config.get('database', 'mongo_client')
+        db_name = self.config.get('database', 'db_name')
+        self.myclient = pymongo.MongoClient(mongo_client)
+        self.mydb = self.myclient[db_name]
+        self.mycol = self.mydb["past_sales"]
+        self.logger.info(self.myclient.list_database_names())
 
     def insert_record_list(self, records: List) -> None:
         x = self.mycol.insert_many(records)
