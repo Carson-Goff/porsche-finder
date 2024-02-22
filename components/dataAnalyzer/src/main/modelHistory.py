@@ -26,8 +26,6 @@ class model:
     
 
     def data_preprocessor(self, df):
-        df['sold'] = df['sold'].astype(int)
-
         X = df[['year', 'trim', 'transmission', 'bodystyle']]
         y = df['price']
 
@@ -45,6 +43,7 @@ class model:
 
     def train_model(self, df):
         X_processed, y = self.data_preprocessor(df)
+        print(X_processed)
         X_train, X_test, y_train, y_test = train_test_split(X_processed, y, test_size=0.3, random_state=42)
 
         self.reg = LinearRegression()
@@ -55,11 +54,12 @@ class model:
         self.logger.info(f"The score of the model is: {score}")
 
 
-
-    def predict_new_listings(self, new_data):
-        X_new = self.preprocessor.transform(new_data)
-        predicted_prices = self.reg.predict(X_new)
-        (f"Predicted prices: {predicted_prices}")
+    def predict_new_listings(self, df):
+        X_new, y = self.data_preprocessor(df)
+        print(X_new)
+        predicted_prices = [int(p) for p in self.reg.predict(X_new)]
+        df['predicted'] = predicted_prices
+        print(df)
         self.logger.info(f"Predicted prices: {predicted_prices}")
 
-        return predicted_prices
+        return df

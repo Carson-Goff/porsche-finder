@@ -20,25 +20,32 @@ class dbOperation:
         logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     def setup_db(self) -> None:
-        # Assuming 'database' section and keys exist in your config file
         mongo_client = self.config.get('database', 'mongo_client')
         db_name = self.config.get('database', 'db_name')
         self.myclient = pymongo.MongoClient(mongo_client)
         self.mydb = self.myclient[db_name]
-        self.mycol = self.mydb["past_sales"]
+        self.mycol = self.mydb["sale_records"]
         self.logger.info(self.myclient.list_database_names())
+        
+    def reset_db(self) -> None:
+        mongo_client = self.config.get('database', 'mongo_client')
+        db_name = self.config.get('database', 'db_name')
+        self.myclient = pymongo.MongoClient(mongo_client)
+        self.mydb = self.myclient[db_name]
+        self.mycol = self.mydb["sale_records"]
+        self.mycol.drop()
 
     def insert_record_list(self, records: List) -> None:
         x = self.mycol.insert_many(records)
-        self.logger.info(f"Record ID's inserted: {x.inserted_ids}")
+        # self.logger.info(f"Record ID's inserted: {x.inserted_ids}")
 
     def retrieve_record(self):
         x = self.mycol.find_one()
-        self.logger.info(f"Single record retrieved: {x}")
+        # self.logger.info(f"Single record retrieved: {x}")
         
     def retrieve_all(self) -> List:
         mydoc = list(self.mycol.find())
-        self.logger.info(f"Records retrieved: {mydoc}")
+        # self.logger.info(f"Records retrieved: {mydoc}")
             
         return mydoc
 

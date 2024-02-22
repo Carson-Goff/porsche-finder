@@ -4,8 +4,11 @@ import logging
 import pandas as pd
 from components.dataCollector.src.main.dbOps import dbOperation
 from components.dataCollector.src.main.scrapeBat import dataCollector
+from components.dataCollector.src.main.getHistoric import responseFetcher
 from components.dataAnalyzer.src.main.transformData import transform
 from components.dataAnalyzer.src.main.modelHistory import model
+
+from components.webInterface.app import app
 
 class porsche_finder:
     
@@ -22,18 +25,20 @@ class porsche_finder:
             self.collector = dataCollector(self.ini_file, self.log_file)
             self.transform = transform(self.ini_file, self.log_file)
             self.model = model(self.ini_file, self.log_file)
+            self.responseFetcher = responseFetcher(self.ini_file, self.log_file)
             
     def setup_logging(self):
         logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             
     def setup(self):
         self.logger.info('Running application')
+        # self.db.reset_db()
         self.db.setup_db()
-        historic = self.collector.get_historic_listings()
-        self.logger.info(historic)
+        # historic = self.collector.get_historic_listings()
+        historic = self.responseFetcher.fetch_response()
+        # print(historic)
+        # self.logger.info(historic)
         self.db.insert_record_list(historic)
-
-    
         
     def prep_model(self):
         data = self.db.retrieve_all()
@@ -50,13 +55,26 @@ class porsche_finder:
         df2 = self.transform.extract_fields(pd.DataFrame(new))
         self.model.predict_new_listings(df2)
         
+    def fetch_historic(self):
+        combined_entries = self.responseFetcher.fetch_response()
+        print(combined_entries)
+        
         
 
 if __name__ == '__main__':
     ini_file = 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
     finder = porsche_finder(ini_file, log_file)
+    # combined_entries = finder.fetch_historic()
+    # print(combined_entries)
     # finder.setup()
     df = finder.prep_model()
+    print(df)
     finder.run_model(df)
-    finder.predict_prices()
+    df2 = finder.predict_prices()
+
+    # if df2 is not None:
+    #     app.config['DATAFRAME'] = df2
+    #     app.run(debug=True)
+    # else:
+    #     print("DataFrame is None, cannot start the server.")

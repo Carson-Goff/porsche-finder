@@ -33,44 +33,17 @@ class dataCollector:
         self.logger.info('Parsing listings')
         extracted_data = []
 
-        if new:
-            listings = soup.find_all('div', class_='listing-card listing-card-separate')
-            for listing in listings:
-                data = {
-                    '_id': listing.get('data-listing_id', None),
-                    'title': listing.find('h3').get_text(strip=True),
-                    'url': listing.find('h3').find('a')['href'],
-                    'image_url': listing.find('img')['src'] if listing.find('img') else None,
-                    'price': listing.find('span', class_='bid-formatted').get_text(strip=True) if listing.find('span', class_='bid-formatted') else None,
-                    'sold': None
-                }
-                extracted_data.append(data)
-        else:
-            script = soup.find('script', {'id': 'bat-theme-auctions-completed-initial-data'})
-            if script and script.string:
-                script_content = script.string
-                json_start = script_content.find('{')
-                json_end = script_content.rfind('}') + 1
-                json_str = script_content[json_start:json_end]
-                try:
-                    data = json.loads(json_str)
-                    listings = data.get('items', [])
-                    for listing in listings:
-                        sold = False
-                        if 'Sold' in listing.get('sold_text', None):
-                            sold = True
-                        data = {
-                            '_id': listing.get('id', None),
-                            'title': listing.get('title', None),
-                            'url': listing.get('url', None),
-                            'image_url': listing.get('thumbnail_url', None),
-                            'price': listing.get('current_bid_formatted', None),
-                            'sold': sold
-                        }
-                        extracted_data.append(data)
-                except json.JSONDecodeError as e:
-                    self.logger.error(f'JSON decoding error: {e}')
-                    return []
+        listings = soup.find_all('div', class_='listing-card listing-card-separate')
+        for listing in listings:
+            data = {
+                '_id': listing.get('data-listing_id', None),
+                'title': listing.find('h3').get_text(strip=True),
+                'url': listing.find('h3').find('a')['href'],
+                'image_url': listing.find('img')['src'] if listing.find('img') else None,
+                'price': listing.find('span', class_='bid-formatted').get_text(strip=True) if listing.find('span', class_='bid-formatted') else None,
+                # 'sold': None
+            }
+            extracted_data.append(data)
 
         return extracted_data
 
