@@ -32,13 +32,15 @@ class porsche_finder:
             
     def setup(self):
         self.logger.info('Running application')
-        # self.db.reset_db()
         self.db.setup_db()
         # historic = self.collector.get_historic_listings()
         historic = self.responseFetcher.fetch_response()
         # print(historic)
         # self.logger.info(historic)
         self.db.insert_record_list(historic)
+
+    def reset_db(self):
+        self.db.reset_db()
         
     def prep_model(self):
         data = self.db.retrieve_all()
@@ -53,6 +55,7 @@ class porsche_finder:
     def predict_prices(self):
         new = self.collector.get_current_listings()
         df2 = self.transform.extract_fields(pd.DataFrame(new))
+        df2.to_csv('new.csv', index=False)
         self.model.predict_new_listings(df2)
         
     def fetch_historic(self):
@@ -67,8 +70,10 @@ if __name__ == '__main__':
     finder = porsche_finder(ini_file, log_file)
     # combined_entries = finder.fetch_historic()
     # print(combined_entries)
+    # finder.reset_db()
     # finder.setup()
     df = finder.prep_model()
+    df.to_csv('old.csv', index=False)
     print(df)
     finder.run_model(df)
     df2 = finder.predict_prices()

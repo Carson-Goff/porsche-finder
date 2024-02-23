@@ -918,3 +918,43 @@ Name: price, dtype: int64
 2024-02-22 15:58:16,050 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.358509549660163
 2024-02-22 15:58:16,050 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
 2024-02-22 15:58:16,168 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:04:32,233 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:04:32,234 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:07:30,969 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:07:30,970 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:07:47,011 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:07:47,011 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:07:47,011 - __main__ - INFO - Running application
+2024-02-22 17:07:47,013 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:07:47,636 - components.dataCollector.src.main.getHistoric - INFO - Parsing listings
+2024-02-22 17:07:47,696 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.215229634256213
+2024-02-22 17:07:47,696 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
+2024-02-22 17:07:47,762 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:10:35,460 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:10:35,460 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:10:35,461 - __main__ - INFO - Running application
+2024-02-22 17:10:35,462 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:10:35,925 - components.dataCollector.src.main.getHistoric - INFO - Parsing listings
+2024-02-22 17:10:52,893 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:10:52,893 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:10:52,919 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.215229634256213
+2024-02-22 17:10:52,920 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
+2024-02-22 17:10:52,994 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:11:04,041 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:11:04,041 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:11:04,068 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.215229634256213
+2024-02-22 17:11:04,068 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
+2024-02-22 17:11:04,136 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:14:05,337 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:14:05,337 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:14:05,371 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.215229634256213
+2024-02-22 17:14:05,371 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
+2024-02-22 17:14:05,474 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:29:28,853 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:29:28,853 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.
+2024-02-22 17:29:28,893 - components.dataAnalyzer.src.main.modelHistory - INFO - The score of the model is: 0.048332114959051986
+2024-02-22 17:29:28,893 - components.dataCollector.src.main.scrapeBat - INFO - Fetching new listings
+2024-02-22 17:29:28,961 - components.dataCollector.src.main.scrapeBat - INFO - Parsing listings
+2024-02-22 17:29:28,974 - components.dataAnalyzer.src.main.modelHistory - INFO - Predicted prices: [50949, 63542, 61115]
+2024-02-22 17:35:00,122 - components.dataCollector.src.main.dbOps - INFO - ['admin', 'config', 'local', 'porsche_sales']
+2024-02-22 17:35:00,123 - components.dataAnalyzer.src.main.modelHistory - INFO - Initialized logging.

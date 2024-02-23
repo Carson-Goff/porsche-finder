@@ -25,21 +25,32 @@ class model:
         self.logger.info('Initialized logging.')
     
 
+    # def data_preprocessor(self, df):
+    #     X = df[['year', 'trim', 'transmission', 'bodystyle']]
+    #     y = df['price']
+
+    #     categorical_features = ['trim', 'transmission', 'bodystyle']
+    #     numeric_features = ['year']
+
+    #     preprocessor = ColumnTransformer(
+    #         transformers=[
+    #             ('num', 'passthrough', numeric_features),
+    #             ('cat', OneHotEncoder(), categorical_features)
+    #         ])
+        
+    #     X_processed = preprocessor.fit_transform(X)
+    #     return X_processed, y
+    
     def data_preprocessor(self, df):
+        df.year = pd.factorize(df.year)[0]
+        df.trim = pd.factorize(df.trim)[0]
+        df.transmission = pd.factorize(df.transmission)[0]
+        df.bodystyle = pd.factorize(df.bodystyle)[0]
+
         X = df[['year', 'trim', 'transmission', 'bodystyle']]
         y = df['price']
-
-        categorical_features = ['trim', 'transmission', 'bodystyle']
-        numeric_features = ['year']
-
-        self.preprocessor = ColumnTransformer(
-            transformers=[
-                ('num', 'passthrough', numeric_features),
-                ('cat', OneHotEncoder(), categorical_features)
-            ])
         
-        X_processed = self.preprocessor.fit_transform(X)
-        return X_processed, y
+        return X, y
 
     def train_model(self, df):
         X_processed, y = self.data_preprocessor(df)
