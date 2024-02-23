@@ -29,7 +29,7 @@ class dataCollector:
         soup = BeautifulSoup(response.text, 'html.parser')
         return soup
 
-    def parse_listings(self, soup, new=True):
+    def parse_listings(self, soup):
         self.logger.info('Parsing listings')
         extracted_data = []
 
@@ -40,13 +40,11 @@ class dataCollector:
                 'title': listing.find('h3').get_text(strip=True),
                 'url': listing.find('h3').find('a')['href'],
                 'image_url': listing.find('img')['src'] if listing.find('img') else None,
-                'price': listing.find('span', class_='bid-formatted').get_text(strip=True) if listing.find('span', class_='bid-formatted') else None,
-                # 'sold': None
+                'price': listing.find('span', class_='bid-formatted').get_text(strip=True) if listing.find('span', class_='bid-formatted') else None
             }
             extracted_data.append(data)
 
         return extracted_data
-
 
     def log_listings(self, listings):
         self.logger.info('Logging listings')
@@ -54,33 +52,9 @@ class dataCollector:
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             for listing in listings:
                 file.write(f"{timestamp}: {listing['title']} - {listing['url']}\n")
-
-    def run(self):
-        soup = self.fetch_listings()
-        # new_listings = self.parse_listings(soup)
-        old_listings = self.parse_listings(soup, False)
-        # print(*new_listings, sep='\n')
-        print(*old_listings, sep='\n')
-
-        # if new_listings:
-        #     self.log_listings(new_listings)
-        # else:
-        #     print("No new listings found.")
-    
-    def get_historic_listings(self):
-        soup = self.fetch_listings()
-        old_listings = self.parse_listings(soup, False)
-        
-        return old_listings
         
     def get_current_listings(self):
         soup = self.fetch_listings()
         current_listings = self.parse_listings(soup)
         
         return current_listings
-
-if __name__ == '__main__':
-    ini_file = 'porsche-finder.ini'
-    log_file = 'logs/porsche-finder.log'
-    collector = dataCollector(ini_file, log_file)
-    collector.run()

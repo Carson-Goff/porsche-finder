@@ -33,53 +33,45 @@ class porsche_finder:
     def setup(self):
         self.logger.info('Running application')
         self.db.setup_db()
-        # historic = self.collector.get_historic_listings()
-        historic = self.responseFetcher.fetch_response()
-        # print(historic)
-        # self.logger.info(historic)
-        self.db.insert_record_list(historic)
+        old = self.responseFetcher.fetch_response()
+        self.logger.info(f"Old Listings: {old}")
+        new = self.collector.get_current_listings()
+        self.logger.info(new)
+        self.db.insert_old_records(old)
+        self.db.insert_new_records(new)
 
     def reset_db(self):
         self.db.reset_db()
         
-    def prep_model(self):
-        data = self.db.retrieve_all()
-        df = self.transform.extract_fields(pd.DataFrame(data))
-        print(df)
+    def prep_data(self):
+        old = pd.DataFrame(self.db.retrieve_old())
+        new = pd.DataFrame(self.db.retrieve_new())
+        old.to_csv('sampleData/old_listings.csv', index=False)
+        new.to_csv('sampleData/new_listings.csv', index=False)
+        df_old = self.transform.extract_fields(old)
+        df_new = self.transform.extract_fields(new)
         
-        return df
+        return df_old, df_new
     
-    def run_model(self, df):
-        self.model.train_model(df)
-
-    def predict_prices(self):
-        new = self.collector.get_current_listings()
-        df2 = self.transform.extract_fields(pd.DataFrame(new))
-        df2.to_csv('new.csv', index=False)
-        self.model.predict_new_listings(df2)
+    def run_model(self, df_old, df_new):
+        self.model.train_model(df_old)
+        df_new = self.model.predict_new_listings(df_new)
         
-    def fetch_historic(self):
-        combined_entries = self.responseFetcher.fetch_response()
-        print(combined_entries)
-        
+        return df_new
         
 
 if __name__ == '__main__':
     ini_file = 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
     finder = porsche_finder(ini_file, log_file)
-    # combined_entries = finder.fetch_historic()
-    # print(combined_entries)
     # finder.reset_db()
     # finder.setup()
-    df = finder.prep_model()
-    df.to_csv('old.csv', index=False)
-    print(df)
-    finder.run_model(df)
-    df2 = finder.predict_prices()
+    df_old, df_new = finder.prep_data()
+    df2 = finder.run_model(df_old, df_new)
+    df2 = df2.astype({"year": int})
 
-    # if df2 is not None:
-    #     app.config['DATAFRAME'] = df2
-    #     app.run(debug=True)
-    # else:
-    #     print("DataFrame is None, cannot start the server.")
+    if df2 is not None:
+        app.config['DATAFRAME'] = df2
+        app.run(debug=True)
+    else:
+        print("DataFrame is None, cannot start the server.")

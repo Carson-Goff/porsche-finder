@@ -2,8 +2,6 @@ import requests
 import configparser
 import os
 import logging
-import json
-import re
 
 class responseFetcher:
     def __init__(self, ini_file, log_file):
@@ -20,14 +18,21 @@ class responseFetcher:
             
         self.url = "https://bringatrailer.com/wp-json/bringatrailer/1.0/data/listings-filter"
         self.headers = {
+            "authority": "bringatrailer.com",
             "accept": "application/json, text/javascript, */*; q=0.01",
             "accept-language": "en-US,en;q=0.9",
             "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
             "origin": "https://bringatrailer.com",
             "referer": "https://bringatrailer.com/porsche/997-911/",
+            "sec-ch-ua": "\"Not A(Brand\";v=\"99\", \"Google Chrome\";v=\"121\", \"Chromium\";v=\"121\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
             "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
             "x-requested-with": "XMLHttpRequest",
-            "x-wp-nonce": "26be95c3bf"
+            "x-wp-nonce": "173fc1ad07"
         }
         self.data = {
             "page": "1",
@@ -38,6 +43,7 @@ class responseFetcher:
             "base_filter[items_type]": "model",
             "sort": "td"
         }
+
         
     def setup_logging(self):
         logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -75,11 +81,3 @@ class responseFetcher:
         data = self.parse_listings(combined_entries)
 
         return data
-    
-
-
-if __name__ == '__main__':
-    fetcher = responseFetcher()
-
-    combined_entries = fetcher.fetch_response()
-    print(combined_entries)

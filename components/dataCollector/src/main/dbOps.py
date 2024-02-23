@@ -24,7 +24,8 @@ class dbOperation:
         db_name = self.config.get('database', 'db_name')
         self.myclient = pymongo.MongoClient(mongo_client)
         self.mydb = self.myclient[db_name]
-        self.mycol = self.mydb["sale_records"]
+        self.oldcol = self.mydb["sale_records"]
+        self.newcol = self.mydb["new_records"]
         self.logger.info(self.myclient.list_database_names())
         
     def reset_db(self) -> None:
@@ -32,22 +33,26 @@ class dbOperation:
         db_name = self.config.get('database', 'db_name')
         self.myclient = pymongo.MongoClient(mongo_client)
         self.mydb = self.myclient[db_name]
-        self.mycol = self.mydb["sale_records"]
-        self.mycol.drop()
+        self.oldcol = self.mydb["sale_records"]
+        self.newcol = self.mydb["new_records"]
+        self.oldcol.drop()
+        self.newcol.drop()
 
-    def insert_record_list(self, records: List) -> None:
-        x = self.mycol.insert_many(records)
-        # self.logger.info(f"Record ID's inserted: {x.inserted_ids}")
-
-    def retrieve_record(self):
-        x = self.mycol.find_one()
-        # self.logger.info(f"Single record retrieved: {x}")
+    def insert_old_records(self, records: List) -> None:
+        self.oldcol.insert_many(records)
         
-    def retrieve_all(self) -> List:
-        mydoc = list(self.mycol.find())
-        # self.logger.info(f"Records retrieved: {mydoc}")
+    def insert_new_records(self, records: List) -> None:
+        self.newcol.insert_many(records)
+        
+    def retrieve_old(self) -> List:
+        records = list(self.oldcol.find())
+        
+        return records
+        
+    def retrieve_new(self) -> List:
+        records = list(self.newcol.find())
             
-        return mydoc
+        return records
 
     def retrieve_query(self, query: Dict):
         mydoc = self.mycol.find(query)
@@ -55,12 +60,3 @@ class dbOperation:
             
         return mydoc
     
-
-if __name__ == '__main__':
-    ini_file = 'porsche-finder.ini'
-    log_file = 'logs/porsche-finder.log'
-    db = dbOperation(ini_file, log_file)
-    db.setup_db()
-    # db.refresh_historical()
-    # db.retrieve_record()
-    db.retrieve_query({ "sold": False })
