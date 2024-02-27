@@ -2,20 +2,21 @@ import configparser
 import os
 import logging
 import pandas as pd
-from components.dataCollector.src.main.dbOps import dbOperation
-from components.dataCollector.src.main.scrapeBat import dataCollector
-from components.dataCollector.src.main.getHistoric import responseFetcher
-from components.dataAnalyzer.src.main.transformData import transform
-from components.dataAnalyzer.src.main.modelHistory import model
-
-from components.webInterface.app import app
+import schedule
+import time
+from components.data_collector.db_ops import dbOperation
+from components.data_collector.scrape_bat import dataCollector
+from components.data_collector.get_historic import responseFetcher
+from components.data_analyzer.transform_data import transform
+from components.data_analyzer.model_history import model
+from components.web_interface.web_app import app
 
 class porsche_finder:
     
     def __init__(self, ini_file, log_file):
         self.ini_file = ini_file
         self.log_file = log_file
-        self.config = configparser.ConfigParser()
+        self.config = configparser.ConfigParser()  
         self.logger = logging.getLogger(__name__)
         self.setup_logging()
 
@@ -31,6 +32,18 @@ class porsche_finder:
         logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             
     def setup(self):
+        # Sets up supporting directories, creates and populates database to be used by the application
+        db_path = 'data/db'
+        if not os.path.exists(db_path):
+            os.makedirs(db_path)
+            self.logger.info(f"Created directory {db_path}")
+
+        # Check if the 'logs' directory exists, if not create it
+        logs_path = 'logs'
+        if not os.path.exists(logs_path):
+            os.makedirs(logs_path)
+            self.logger.info(f"Created directory {logs_path}")
+            
         self.logger.info('Running application')
         self.db.setup_db()
         old = self.responseFetcher.fetch_response()
@@ -41,37 +54,48 @@ class porsche_finder:
         self.db.insert_new_records(new)
 
     def reset_db(self):
+        # removes the database so it can be setup again in a clean state
         self.db.reset_db()
         
     def prep_data(self):
+        # extracts fields from data to prepare it for the model
         old = pd.DataFrame(self.db.retrieve_old())
         new = pd.DataFrame(self.db.retrieve_new())
-        old.to_csv('sampleData/old_listings.csv', index=False)
-        new.to_csv('sampleData/new_listings.csv', index=False)
         df_old = self.transform.extract_fields(old)
         df_new = self.transform.extract_fields(new)
         
         return df_old, df_new
     
     def run_model(self, df_old, df_new):
+        # trains the model and runs prediction on current listings
         self.model.train_model(df_old)
         df_new = self.model.predict_new_listings(df_new)
         
         return df_new
-        
+    
+    def daily_job(self):
+        # sets up actions into a single function so that the app can be refreshed daily
+        self.reset_db()
+        self.setup()
+        df_old, df_new = self.prep_data()
+        df2 = self.run_model(df_old, df_new)
+        df2 = df2.astype({"year": int})
 
-if __name__ == '__main__':
+        if df2 is not None:
+            app.config['DATAFRAME'] = df2
+            app.run(debug=True)
+        else:
+            print("DataFrame is None, cannot start the server.")
+
+def run_daily_job():
     ini_file = 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
     finder = porsche_finder(ini_file, log_file)
-    # finder.reset_db()
-    # finder.setup()
-    df_old, df_new = finder.prep_data()
-    df2 = finder.run_model(df_old, df_new)
-    df2 = df2.astype({"year": int})
+    finder.daily_job()
 
-    if df2 is not None:
-        app.config['DATAFRAME'] = df2
-        app.run(debug=True)
-    else:
-        print("DataFrame is None, cannot start the server.")
+if __name__ == '__main__':
+    run_daily_job()
+    schedule.every().day.at("19:00").do(run_daily_job)
+    while True:
+        schedule.run_pending()
+        time.sleep(60)  # Wait one minute before checking again
