@@ -1,0 +1,21 @@
+name: CI/CD Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pytest coverage
+    - name: Run tests and generate report
+      run: |
+        coverage3 run --omit='test/*' -m pytest --junitxml=junitreport.xml test/test_integration.py
+        coverage3 report -m
