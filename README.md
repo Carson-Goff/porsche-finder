@@ -6,3 +6,6 @@ it find car
     - `sudo systemctl start mongod`
     - maybe this one
     - `sudo mongod --dbpath ~/school/porsche-finder/data/db`
+
+- Stop the mongodb
+    - `sudo systemctl stop mongod`
