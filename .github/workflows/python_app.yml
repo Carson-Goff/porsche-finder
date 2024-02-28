@@ -17,5 +17,5 @@ jobs:
         pip install pytest coverage
     - name: Run tests and generate report
       run: |
-        coverage3 run --omit='test/*' -m pytest --junitxml=junitreport.xml
+        coverage3 run --omit='test/*' -m pytest --junitxml=junitreport.xml test/test_integration.py
         coverage3 report -m

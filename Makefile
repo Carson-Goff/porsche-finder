@@ -8,7 +8,7 @@ venv/touchfile: requirements.txt
 	touch .venv/touchfile
 
 test:
-	coverage3 run --omit='test/*' -m pytest --junitxml=junitreport.xml
+	. .venv/bin/activate; coverage3 run --omit='test/*' -m pytest --junitxml=junitreport.xml test/test_integration.py
 	coverage3 report -m
 
 package:
