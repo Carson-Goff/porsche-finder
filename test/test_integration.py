@@ -2,6 +2,8 @@ import unittest
 import pandas as pd
 import os
 import sys
+import mongomock
+from unittest import mock
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -11,7 +13,9 @@ from app import porsche_finder
 
 class TestPorscheFinder(unittest.TestCase):
     def setUp(self):
-        self.finder = porsche_finder('test/test.ini', 'test/test.log')
+        with mock.patch('pymongo.MongoClient', new=mongomock.MongoClient):
+            self.finder = porsche_finder('test/test.ini', 'test/test.log')
+        
         self.assertIsNotNone(self.finder.db, "Database should be initialized.")
         self.finder.reset_db()
 
