@@ -68,8 +68,10 @@ class responseFetcher:
     def fetch_response(self):
         # sends the request and runs the parse_listings function to return a json
         response = requests.post(self.url, headers=self.headers, data=self.data)
+        self.logger.info(f"Response status code: {response.status_code}")
         if response.status_code == 200:
             response_json = response.json()
+            self.logger.debug(f"Response status code: {response_json}")
         else:
             return f"Failed to fetch data: {response.status_code}"
         
