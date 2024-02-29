@@ -41,7 +41,7 @@ class dbOperation:
         self.newcol.drop()
 
     def insert_old_records(self, records: List) -> None:
-        self.logger.info(f"Inserting historic listings: {records}")
+        # self.logger.info(f"Inserting historic listings: {records}")
         self.oldcol.insert_many(records)
         
     def insert_new_records(self, records: List) -> None:

@@ -30,7 +30,7 @@ class porsche_finder:
             self.responseFetcher = responseFetcher(self.ini_file, self.log_file)
             
     def setup_logging(self):
-        logging.basicConfig(level=logging.INFO, stream=sys.stdout, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             
     def setup(self):
         # sets up supporting directories then creates and populates database to be used by the application
@@ -47,7 +47,7 @@ class porsche_finder:
         self.logger.info('Running application')
         self.db.setup_db()
         old = self.responseFetcher.fetch_response()
-        self.logger.info(f"Old Listings: {old}")
+        # self.logger.info(f"Old Listings: {old}")
         new = self.collector.get_current_listings()
         self.logger.info(new)
         self.db.insert_old_records(old)
