@@ -27,7 +27,7 @@ class dbOperation:
         self.mydb = self.myclient[db_name]
         self.oldcol = self.mydb["sale_records"]
         self.newcol = self.mydb["new_records"]
-        self.logger.info(self.myclient.list_database_names())
+        self.logger.info(f"Database names: {self.myclient.list_database_names()}")
         
     def reset_db(self) -> None:
         # removes collections from the database so they can be reset
@@ -44,6 +44,7 @@ class dbOperation:
         self.oldcol.insert_many(records)
         
     def insert_new_records(self, records: List) -> None:
+        self.logger.info(f"Inserting current listings: {records}")
         self.newcol.insert_many(records)
         
     def retrieve_old(self) -> List:

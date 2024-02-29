@@ -95,7 +95,9 @@ def run_daily_job():
         ini_file = 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
     finder = porsche_finder(ini_file, log_file)
+    finder.logger.info(os.environ)
     finder.daily_job()
+    finder.logger.info("Daily run complete")
 
 if __name__ == '__main__':
     run_daily_job()
