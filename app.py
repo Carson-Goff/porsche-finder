@@ -1,4 +1,5 @@
 import configparser
+import sys
 import os
 import logging
 import pandas as pd
@@ -29,7 +30,7 @@ class porsche_finder:
             self.responseFetcher = responseFetcher(self.ini_file, self.log_file)
             
     def setup_logging(self):
-        logging.basicConfig(filename=self.log_file, level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(filename=self.log_file, level=logging.INFO, stream=sys.stdout, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
             
     def setup(self):
         # sets up supporting directories then creates and populates database to be used by the application
