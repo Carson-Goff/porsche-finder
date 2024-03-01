@@ -9,7 +9,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
 
-from app import porsche_finder
+from components.app import porsche_finder
 
 class TestPorscheFinder(unittest.TestCase):
     @mock.patch('pymongo.MongoClient', new_callable=lambda: mongomock.MongoClient)

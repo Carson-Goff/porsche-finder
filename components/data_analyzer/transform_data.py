@@ -2,6 +2,7 @@ import os
 import configparser
 import logging
 import re
+import pandas as pd
 
 
 class transform:
@@ -23,6 +24,7 @@ class transform:
 
     def extract_fields(self, df):
         # uses regex to capture information about listings and present it in seperate columns to be used as predictors in the model
+        self.logger.info(f"Transforming df: {df}")
         years = []
         trims = []
         transmissions = []
@@ -53,6 +55,8 @@ class transform:
         df['bodystyle'] = bodystyles
 
         df = df.dropna(subset=['year'])
-        df['price'] = df['price'].replace('[\$,]', '', regex=True).astype(int)
+        df['price'] = pd.to_numeric(df['price'].replace('[\$,]', '', regex=True), errors='coerce')
+        df['price'] = df['price'].fillna(0).astype(int)
+        self.logger.info(f"Transformed df: {df}")
 
         return df

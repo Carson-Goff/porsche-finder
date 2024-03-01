@@ -82,5 +82,10 @@ class responseFetcher:
         combined_entries.extend(unsold_items)
         
         data = self.parse_listings(combined_entries)
+        self.logger.info(data[0])
 
         return data
+    
+if __name__ == '__main__':
+    data = responseFetcher.fetch_response()
+    print(data)
