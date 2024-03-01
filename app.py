@@ -78,6 +78,7 @@ class porsche_finder:
         if df2 is not None:
             df2 = df2.astype({"year": int})
             app.config['DATAFRAME'] = df2
+            self.logger.info(f"Dataframe: {app.config['DATAFRAME']}")
         else:
             print("DataFrame is None, cannot start the server.")
 
