@@ -84,7 +84,7 @@ class porsche_finder:
 def run_daily_job():
     ini_file = 'heroku.ini' if 'DYNO' in os.environ else 'porsche-finder.ini'
     log_file = 'logs/porsche-finder.log'
-    finder = PorscheFinder(ini_file, log_file)
+    finder = porsche_finder(ini_file, log_file)
     finder.daily_job()
     finder.logger.info("Daily run complete")
 
