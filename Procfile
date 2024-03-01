@@ -1,1 +1,1 @@
-web: python app.py
+web: gunicorn "components.web_interface.web_app:create_app()"

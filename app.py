@@ -80,7 +80,7 @@ class porsche_finder:
             app.config['DATAFRAME'] = df2
             self.logger.info(f"Dataframe: {app.config['DATAFRAME']}")
         else:
-            print("DataFrame is None, cannot start the server.")
+            self.logger.error("DataFrame is None, cannot start the server.")
 
 def run_daily_job():
     ini_file = 'heroku.ini' if 'DYNO' in os.environ else 'porsche-finder.ini'
