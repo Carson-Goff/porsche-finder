@@ -10,7 +10,7 @@ from components.data_analyzer.transform_data import transform
 from components.data_analyzer.model_history import model
 from components.web_interface.web_app import app
 
-class PorscheFinder:
+class porsche_finder:
     def __init__(self, ini_file, log_file):
         self.ini_file = ini_file
         self.log_file = log_file
